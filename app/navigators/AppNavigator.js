@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { StatusBar, View } from 'react-native';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, DrawerNavigator } from 'react-navigation';
 
-import BestPosts from '../components/BestPosts';
-import TopPosts from '../components/TopPosts';
-import NewPosts from '../components/NewPosts';
+import BestPosts from '../containers/BestPosts';
+import TopPosts from '../containers/TopPosts';
+import NewPosts from '../containers/NewPosts';
 import Settings from '../components/Settings';
 
-const Nav = TabNavigator(
+const TabNav = TabNavigator(
   {
     Best: { screen: BestPosts },
     Top: { screen: TopPosts },
@@ -23,12 +23,32 @@ const Nav = TabNavigator(
   }
 );
 
+const DrawerNav = DrawerNavigator(
+  {
+    Posts: {
+      path: '/',
+      screen: TabNav
+    },
+    Settings: {
+      path: '/settings',
+      screen: Settings
+    }
+  },
+  {
+    initialRouteName: 'Posts',
+    contentOptions: {
+      activeBackgroundColor: '#ff6600',
+      activeTintColor: '#f5fcff'
+    }
+  }
+);
+
 class AppNavigator extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor="#ff6600" />
-        <Nav />
+        <DrawerNav />
       </View>
     );
   }
