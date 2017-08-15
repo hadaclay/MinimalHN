@@ -6,15 +6,17 @@ import BestPosts from '../containers/BestPosts';
 import TopPosts from '../containers/TopPosts';
 import NewPosts from '../containers/NewPosts';
 import Settings from '../components/Settings';
+import Login from '../components/Login';
 
 const TabNav = TabNavigator(
   {
-    Best: { screen: BestPosts },
     Top: { screen: TopPosts },
+    Best: { screen: BestPosts },
     New: { screen: NewPosts }
   },
   {
-    initialRouteName: 'Best',
+    initialRouteName: 'Top',
+    lazy: true,
     tabBarOptions: {
       style: {
         backgroundColor: '#ff6600'
@@ -32,6 +34,10 @@ const DrawerNav = DrawerNavigator(
     Settings: {
       path: '/settings',
       screen: Settings
+    },
+    Login: {
+      path: '/login',
+      screen: Login
     }
   },
   {
