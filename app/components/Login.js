@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { WebView } from 'react-native';
 
-class Login extends Component {
-  render() {
-    return <WebView source={{ uri: 'https://news.ycombinator.com/login' }} />;
-  }
-}
+const Login = () =>
+  <WebView source={{ uri: 'https://news.ycombinator.com/login' }} />;
 
 export default Login;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
-import { ActivityIndicator, Text, FlatList, View, WebView } from 'react-native';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 
 class Posts extends Component {
   constructor(props) {
@@ -18,6 +19,36 @@ class Posts extends Component {
     this.getPostData = this.getPostData.bind(this);
   }
 
+  async componentDidMount() {
+    await this.getPostIDs();
+    await this.getPostData(this.state.postIDs);
+    await this.setState({ loading: false });
+  }
+
+  async getPost(id) {
+    try {
+      const request = await fetch(
+        `https://hacker-news.firebaseio.com/v0/item/${id}.json`
+      );
+      const postData = await request.json();
+      return await postData;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getPostData(postIDs) {
+    try {
+      const promises = postIDs.map(id => this.getPost(id));
+      const posts = await Promise.all(promises);
+      await this.setState({
+        postData: posts
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async getPostIDs(start, end) {
     try {
       const response = await fetch(
@@ -31,49 +62,13 @@ class Posts extends Component {
     }
   }
 
-  async getPost(id) {
-    try {
-      const request = await fetch(
-        `https://hacker-news.firebaseio.com/v0/item/${id}.json`
-      );
-      const data = await request.json();
-      return await data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async getPostData(postIDs) {
-    try {
-      const promises = postIDs.map(id => this.getPost(id));
-      const posts = await Promise.all(promises);
-      await console.log(posts);
-      await this.setState({
-        postData: posts
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async componentDidMount() {
-    await this.getPostIDs();
-    await this.getPostData(this.state.postIDs);
-    await this.setState({ loading: false });
-  }
-
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: '86%',
-          backgroundColor: '#CED0CE',
-          marginLeft: '14%'
-        }}
-      />
-    );
-  };
+  renderSeparator = () =>
+    <View
+      style={{
+        height: 1,
+        backgroundColor: '#ced0ce'
+      }}
+    />;
 
   renderFooter = () => {
     if (!this.state.loading) return null;
@@ -83,7 +78,7 @@ class Posts extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: '#CED0CE'
+          borderColor: '#ced0ce'
         }}
       >
         <ActivityIndicator color="#ff6600" animating size="large" />
@@ -92,6 +87,7 @@ class Posts extends Component {
   };
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
@@ -100,9 +96,11 @@ class Posts extends Component {
             <ListItem
               title={item.title}
               subtitle={`${item.score} Points | ${item.by}`}
+              onPress={() =>
+                navigate('Comments', { post: item.id, comments: item.kids })}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item}
           ItemSeparatorComponent={this.renderSeparator}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.loading}
@@ -111,5 +109,9 @@ class Posts extends Component {
     );
   }
 }
+
+Posts.propTypes = {
+  filter: PropTypes.string.isRequired
+};
 
 export default Posts;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
 
 import Posts from '../components/Posts';
 
@@ -9,7 +8,7 @@ class TopPosts extends Component {
   };
 
   render() {
-    return <Posts filter="top" />;
+    return <Posts filter="top" navigation={this.props.navigation} />;
   }
 }
 
