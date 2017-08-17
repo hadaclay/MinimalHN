@@ -96,11 +96,14 @@ class Posts extends Component {
             <ListItem
               title={item.title}
               subtitle={`${item.score} Points | ${item.by}`}
-              onPress={() =>
+              rightIcon={{ name: "comment" }}
+              onPressRightIcon={() =>
                 navigate('Comments', { post: item.id, comments: item.kids })}
+              onPress={() =>
+                navigate('ViewPost', { url: item.url })}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
-          keyExtractor={item => item}
+          keyExtractor={item => item.id}
           ItemSeparatorComponent={this.renderSeparator}
           ListFooterComponent={this.renderFooter}
           refreshing={this.state.loading}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { List, ListItem } from 'react-native-elements';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 
+import Comment from './Comment';
+
 class PostComments extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +20,6 @@ class PostComments extends Component {
   async componentDidMount() {
     const { params } = this.props.navigation.state;
     const comments = await this.getComments(params.comments);
-    console.log(comments);
     await this.setState({
       commentData: comments,
       loading: false
@@ -83,9 +84,11 @@ class PostComments extends Component {
         <FlatList
           data={this.state.commentData}
           renderItem={({ item }) =>
-            <ListItem
-              title={item.text}
-              subtitle={item.by}
+            <Comment
+              indent={5}
+              children={item.children}
+              commentText={item.text}
+              author={item.by}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
           keyExtractor={item => item.id}

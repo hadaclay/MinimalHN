@@ -12,6 +12,7 @@ import NewPosts from '../containers/NewPosts';
 import PostComments from '../components/PostComments';
 import Settings from '../components/Settings';
 import Login from '../components/Login';
+import ViewPost from '../components/ViewPost';
 
 const TabNav = TabNavigator(
   {
@@ -57,7 +58,8 @@ const DrawerNav = DrawerNavigator(
 const RootNav = StackNavigator(
   {
     Drawer: { screen: DrawerNav },
-    Comments: { screen: PostComments }
+    Comments: { screen: PostComments },
+    ViewPost: { screen: ViewPost }
   },
   {
     initialRouteName: 'Drawer'
