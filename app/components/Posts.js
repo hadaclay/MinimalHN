@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text } from 'react-native';
+import moment from 'moment';
 
 class Posts extends Component {
   constructor(props) {
@@ -14,9 +15,10 @@ class Posts extends Component {
       refreshing: false
     };
 
-    this.getPostIDs = this.getPostIDs.bind(this);
     this.getPost = this.getPost.bind(this);
+    this.getPostIDs = this.getPostIDs.bind(this);
     this.getPostData = this.getPostData.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
   }
 
   async componentDidMount() {
@@ -62,6 +64,13 @@ class Posts extends Component {
     }
   }
 
+  async handleRefresh() {
+    this.setState({ loading: true });
+    await this.getPostIDs();
+    await this.getPostData(this.state.postIDs);
+    await this.setState({ loading: false });
+  }
+
   renderSeparator = () =>
     <View
       style={{
@@ -89,23 +98,39 @@ class Posts extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <List
+        containerStyle={{
+          marginTop: 0,
+          borderTopWidth: 0,
+          borderBottomWidth: 0
+        }}
+      >
         <FlatList
           data={this.state.postData}
           renderItem={({ item }) =>
             <ListItem
-              title={item.title}
-              subtitle={`${item.score} Points | ${item.by}`}
-              rightIcon={{ name: "comment" }}
+              title={
+                <Text>
+                  {item.title}
+                </Text>
+              }
+              subtitle={`${item.score} points by ${item.by} ${moment
+                .unix(item.time)
+                .fromNow()}`}
+              rightIcon={{ name: 'comment' }}
               onPressRightIcon={() =>
-                navigate('Comments', { post: item.id, comments: item.kids })}
-              onPress={() =>
-                navigate('ViewPost', { url: item.url })}
+                navigate('Comments', {
+                  post: item.id,
+                  comments: item.kids,
+                  fullPost: item
+                })}
+              onPress={() => navigate('ViewPost', { url: item.url })}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
           keyExtractor={item => item.id}
           ItemSeparatorComponent={this.renderSeparator}
           ListFooterComponent={this.renderFooter}
+          onRefresh={this.handleRefresh}
           refreshing={this.state.loading}
         />
       </List>
@@ -114,7 +139,8 @@ class Posts extends Component {
 }
 
 Posts.propTypes = {
-  filter: PropTypes.string.isRequired
+  filter: PropTypes.string.isRequired,
+  navigation: PropTypes.object.isRequired
 };
 
 export default Posts;

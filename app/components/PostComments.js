@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 
@@ -19,11 +20,15 @@ class PostComments extends Component {
 
   async componentDidMount() {
     const { params } = this.props.navigation.state;
-    const comments = await this.getComments(params.comments);
-    await this.setState({
-      commentData: comments,
-      loading: false
-    });
+    try {
+      const comments = await this.getComments(params.comments);
+      await this.setState({
+        commentData: comments,
+        loading: false
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async getComment(id) {
@@ -79,14 +84,29 @@ class PostComments extends Component {
   };
 
   render() {
+    const { navigate } = this.props.navigation;
+    const { params } = this.props.navigation.state;
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <List
+        containerStyle={{
+          marginTop: 5,
+          borderTopWidth: 0,
+          borderBottomWidth: 0
+        }}
+      >
+        <ListItem
+          title={params.fullPost.title}
+          subtitle={`${params.fullPost.score} points | ${params.fullPost.by}`}
+          onPressRightIcon={() =>
+            navigate('ViewPost', { url: params.fullPost.url })}
+          containerStyle={{ borderBottomWidth: 1, borderColor: '#ced0ce' }}
+        />
         <FlatList
           data={this.state.commentData}
           renderItem={({ item }) =>
             <Comment
               indent={5}
-              children={item.children}
+              childComments={item.children}
               commentText={item.text}
               author={item.by}
               containerStyle={{ borderBottomWidth: 0 }}
@@ -100,5 +120,9 @@ class PostComments extends Component {
     );
   }
 }
+
+PostComments.propTypes = {
+  navigation: PropTypes.object.isRequired
+};
 
 export default PostComments;

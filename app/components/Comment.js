@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
@@ -10,15 +11,23 @@ const styles = StyleSheet.create({
   }
 });
 
+const commentStyles = StyleSheet.create({
+  a: {
+    color: '#444444',
+    textDecorationLine: 'underline'
+  }
+});
+
 const Comment = props => {
+  // Recursively render child comments
   let replies = null;
-  let newIndent = props.indent + 5;
-  if (props.children) {
-    replies = props.children.map(reply =>
+  let newIndent = props.indent + 3;
+  if (props.childComments) {
+    replies = props.childComments.map(reply =>
       <Comment
         key={reply.id}
         indent={newIndent}
-        children={reply.children}
+        childComments={reply.children}
         commentText={reply.text}
         author={reply.by}
         containerStyle={{ borderBottomWidth: 0 }}
@@ -27,14 +36,29 @@ const Comment = props => {
   }
 
   return (
-    <View style={{ marginLeft: props.indent }}>
+    <View style={{ marginTop: 0, marginLeft: props.indent }}>
       <Text style={styles.author}>
-        {props.author}
+        {props.author || '[deleted]'}
       </Text>
-      {props.commentText ? <HTMLView value={props.commentText} /> : null}
+      {props.commentText
+        ? <HTMLView value={props.commentText} stylesheet={commentStyles} />
+        : <Text>Comment Deleted</Text>}
       {replies}
     </View>
   );
+};
+
+Comment.propTypes = {
+  indent: PropTypes.number.isRequired,
+  childComments: PropTypes.arrayOf(PropTypes.object),
+  author: PropTypes.string,
+  commentText: PropTypes.string
+};
+
+Comment.defaultProps = {
+  author: '[deleted]',
+  commentText: 'Comment Deleted',
+  childComments: []
 };
 
 export default Comment;

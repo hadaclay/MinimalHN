@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Posts from '../components/Posts';
 
@@ -11,5 +12,9 @@ class NewPosts extends Component {
     return <Posts filter="new" navigation={this.props.navigation} />;
   }
 }
+
+NewPosts.propTypes = {
+  navigation: PropTypes.object.isRequired
+};
 
 export default NewPosts;

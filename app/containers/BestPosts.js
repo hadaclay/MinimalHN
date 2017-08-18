@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Posts from '../components/Posts';
 
@@ -11,5 +12,9 @@ class BestPosts extends Component {
     return <Posts filter="best" navigation={this.props.navigation} />;
   }
 }
+
+BestPosts.propTypes = {
+  navigation: PropTypes.object.isRequired
+};
 
 export default BestPosts;

@@ -6,7 +6,8 @@
     "prettier/react"
   ],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "class-methods-use-this": "off"
   },
   "globals": {
     "fetch": true

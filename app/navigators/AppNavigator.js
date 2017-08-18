@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StatusBar, View } from 'react-native';
 import {
   StackNavigator,
@@ -11,7 +11,6 @@ import TopPosts from '../containers/TopPosts';
 import NewPosts from '../containers/NewPosts';
 import PostComments from '../components/PostComments';
 import Settings from '../components/Settings';
-import Login from '../components/Login';
 import ViewPost from '../components/ViewPost';
 
 const TabNav = TabNavigator(
@@ -41,10 +40,6 @@ const DrawerNav = DrawerNavigator(
       path: '/settings',
       screen: Settings
     },
-    Login: {
-      path: '/login',
-      screen: Login
-    }
   },
   {
     initialRouteName: 'Posts',
@@ -66,15 +61,10 @@ const RootNav = StackNavigator(
   }
 );
 
-class AppNavigator extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, marginTop: -60 }}>
-        <StatusBar backgroundColor="#ff6600" />
-        <RootNav />
-      </View>
-    );
-  }
-}
+const AppNavigator = () =>
+  <View style={{ flex: 1, marginTop: -60 }}>
+    <StatusBar backgroundColor="#ff6600" />
+    <RootNav />
+  </View>;
 
 export default AppNavigator;
