@@ -116,15 +116,22 @@ class Posts extends Component {
               }
               subtitle={`${item.score} points by ${item.by} ${moment
                 .unix(item.time)
-                .fromNow()}`}
+                .fromNow()} | ${item.descendants} comments`}
               rightIcon={{ name: 'comment' }}
               onPressRightIcon={() =>
                 navigate('Comments', {
                   post: item.id,
                   comments: item.kids,
-                  fullPost: item
+                  fullPost: item,
+                  title: item.title
                 })}
-              onPress={() => navigate('ViewPost', { url: item.url })}
+              onPress={() => navigate('ViewPost', {
+                url: item.url,
+                post: item.id,
+                comments: item.kids,
+                fullPost: item,
+                title: item.title
+               })}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
           keyExtractor={item => item.id}

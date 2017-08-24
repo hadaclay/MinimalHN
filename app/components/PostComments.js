@@ -6,6 +6,10 @@ import { ActivityIndicator, FlatList, View } from 'react-native';
 import Comment from './Comment';
 
 class PostComments extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.title}`,
+  });
+
   constructor(props) {
     super(props);
 
@@ -96,7 +100,7 @@ class PostComments extends Component {
       >
         <ListItem
           title={params.fullPost.title}
-          subtitle={`${params.fullPost.score} points | ${params.fullPost.by}`}
+          subtitle={`${params.fullPost.score} points | ${params.fullPost.by} | ${params.fullPost.descendants} comments`}
           onPressRightIcon={() =>
             navigate('ViewPost', { url: params.fullPost.url })}
           containerStyle={{ borderBottomWidth: 1, borderColor: '#ced0ce' }}

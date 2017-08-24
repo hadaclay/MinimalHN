@@ -5,6 +5,7 @@ import {
   TabNavigator,
   DrawerNavigator
 } from 'react-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import BestPosts from '../containers/BestPosts';
 import TopPosts from '../containers/TopPosts';
@@ -34,27 +35,86 @@ const DrawerNav = DrawerNavigator(
   {
     Posts: {
       path: '/',
-      screen: TabNav
+      screen: TabNav,
+      navigationOptions: ({ navigation }) => ({
+        headerTintColor: '#eeeeee',
+        headerStyle: {
+          backgroundColor: '#ff6600',
+          elevation: 0,
+          paddingLeft: 10
+        },
+        title: 'Posts',
+        headerLeft: (
+          <Icon
+            name="menu"
+            size={30}
+            color="#eee"
+            onPress={() => navigation.navigate('DrawerOpen')}
+          />
+        )
+      })
     },
     Settings: {
       path: '/settings',
-      screen: Settings
-    },
+      screen: Settings,
+      navigationOptions: ({ navigation }) => ({
+        headerTintColor: '#eeeeee',
+        headerStyle: { backgroundColor: '#ff6600' },
+        title: 'Settings',
+        headerLeft: (
+          <Icon
+            name="menu"
+            size={30}
+            color="#eee"
+            onPress={() => navigation.navigate('DrawerOpen')}
+          />
+        )
+      })
+    }
   },
   {
     initialRouteName: 'Posts',
     contentOptions: {
       activeBackgroundColor: '#ff6600',
       activeTintColor: '#f5fcff'
+    },
+    tabBarOptions: {
+      activeTintColor: '#ff6600'
     }
   }
 );
 
 const RootNav = StackNavigator(
   {
-    Drawer: { screen: DrawerNav },
-    Comments: { screen: PostComments },
-    ViewPost: { screen: ViewPost }
+    Drawer: {
+      screen: DrawerNav,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: '#ff6600',
+          elevation: 0,
+          paddingLeft: 10
+        }
+      }
+    },
+    Comments: {
+      screen: PostComments,
+      navigationOptions: {
+        headerTintColor: '#eeeeee',
+        headerStyle: {
+          backgroundColor: '#ff6600'
+        }
+      }
+    },
+    ViewPost: {
+      screen: ViewPost,
+      navigationOptions: {
+        headerTintColor: '#eeeeee',
+        headerStyle: {
+          backgroundColor: '#ff6600',
+          paddingRight: 10
+        }
+      }
+    }
   },
   {
     initialRouteName: 'Drawer'
@@ -62,7 +122,7 @@ const RootNav = StackNavigator(
 );
 
 const AppNavigator = () =>
-  <View style={{ flex: 1, marginTop: -60 }}>
+  <View style={{ flex: 1 }}>
     <StatusBar backgroundColor="#ff6600" />
     <RootNav />
   </View>;
