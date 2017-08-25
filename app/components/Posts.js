@@ -12,19 +12,62 @@ class Posts extends Component {
       loading: true,
       postIDs: [],
       postData: [],
-      refreshing: false
+      refreshing: false,
+      startPost: 0,
+      endPost: 30
     };
 
     this.getPost = this.getPost.bind(this);
     this.getPostIDs = this.getPostIDs.bind(this);
     this.getPostData = this.getPostData.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
+    this.handleLoadMore = this.handleLoadMore.bind(this);
   }
 
   async componentDidMount() {
     await this.getPostIDs();
     await this.getPostData(this.state.postIDs);
     await this.setState({ loading: false });
+  }
+
+  async getPostIDs() {
+    let response, postIDs;
+    try {
+      if (this.state.postIDs.length <= 0) {
+        response = await fetch(
+          `https://hacker-news.firebaseio.com/v0/${this.props
+            .filter}stories.json`
+        );
+        postIDs = await response.json();
+      }
+
+      const { startPost, endPost } = this.state;
+      await this.setState({
+        postIDs:
+          startPost === 0
+            ? postIDs.slice(startPost, endPost)
+            : [...this.state.postIDs, ...postIDs.slice(startPost, endPost)],
+        startPost: startPost + 30,
+        endPost: endPost + 30
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getPostData(postIDs) {
+    try {
+      const promises = postIDs.map(id => this.getPost(id));
+      const posts = await Promise.all(promises);
+      await this.setState({
+        postData:
+          this.state.postData.length === 0
+            ? posts
+            : [...this.state.postData, ...posts]
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getPost(id) {
@@ -39,35 +82,27 @@ class Posts extends Component {
     }
   }
 
-  async getPostData(postIDs) {
-    try {
-      const promises = postIDs.map(id => this.getPost(id));
-      const posts = await Promise.all(promises);
-      await this.setState({
-        postData: posts
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async getPostIDs(start, end) {
-    try {
-      const response = await fetch(
-        `https://hacker-news.firebaseio.com/v0/${this.props.filter}stories.json`
-      );
-      const postIDs = await response.json();
-
-      await this.setState({ postIDs: postIDs.slice(0, 30) });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   async handleRefresh() {
-    this.setState({ loading: true });
+    this.setState({
+      loading: true,
+      startPost: 0,
+      endPost: 30,
+      postData: [],
+      postIDs: []
+    });
+
     await this.getPostIDs();
     await this.getPostData(this.state.postIDs);
+    await this.setState({ loading: false });
+  }
+
+  async handleLoadMore() {
+    if (this.state.postData.length === 0) return;
+    if (this.state.loading) return;
+
+    this.setState({ loading: true });
+    await this.getPostIDs();
+    await this.getPostData(this.state.postIDs.slice(-30));
     await this.setState({ loading: false });
   }
 
@@ -87,10 +122,11 @@ class Posts extends Component {
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: '#ced0ce'
+          borderColor: '#ced0ce',
+          paddingBottom: 20
         }}
       >
-        <ActivityIndicator color="#ff6600" animating size="large" />
+        <ActivityIndicator animating size="large" />
       </View>
     );
   };
@@ -125,13 +161,25 @@ class Posts extends Component {
                   fullPost: item,
                   title: item.title
                 })}
-              onPress={() => navigate('ViewPost', {
-                url: item.url,
-                post: item.id,
-                comments: item.kids,
-                fullPost: item,
-                title: item.title
-               })}
+              onPress={() => {
+                if (item.url) {
+                  navigate('ViewPost', {
+                    url: item.url,
+                    post: item.id,
+                    comments: item.kids,
+                    fullPost: item,
+                    title: item.title
+                  });
+                } else {
+                  // If no url (Ask HN etc, go to Comments)
+                  navigate('Comments', {
+                    post: item.id,
+                    comments: item.kids,
+                    fullPost: item,
+                    title: item.title
+                  });
+                }
+              }}
               containerStyle={{ borderBottomWidth: 0 }}
             />}
           keyExtractor={item => item.id}
@@ -139,6 +187,7 @@ class Posts extends Component {
           ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.loading}
+          onEndReached={this.handleLoadMore}
         />
       </List>
     );
