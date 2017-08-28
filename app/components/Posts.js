@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
 import { ActivityIndicator, FlatList, View, Text } from 'react-native';
+import { AdMobBanner } from 'react-native-admob';
+import Config from 'react-native-config';
 import moment from 'moment';
 
 class Posts extends Component {
@@ -31,8 +33,9 @@ class Posts extends Component {
   }
 
   async getPostIDs() {
-    let response, postIDs;
     try {
+      let response,
+        postIDs = [];
       if (this.state.postIDs.length <= 0) {
         response = await fetch(
           `https://hacker-news.firebaseio.com/v0/${this.props
@@ -41,14 +44,16 @@ class Posts extends Component {
         postIDs = await response.json();
       }
 
-      const { startPost, endPost } = this.state;
       await this.setState({
         postIDs:
-          startPost === 0
-            ? postIDs.slice(startPost, endPost)
-            : [...this.state.postIDs, ...postIDs.slice(startPost, endPost)],
-        startPost: startPost + 30,
-        endPost: endPost + 30
+          postIDs.length === 0
+            ? postIDs.slice(this.state.startPost, this.state.endPost)
+            : [
+                ...this.state.postIDs,
+                ...postIDs.slice(this.state.startPost, this.state.endPost)
+              ],
+        startPost: this.state.startPost + 31,
+        endPost: this.state.endPost + 30
       });
     } catch (error) {
       console.error(error);
@@ -138,7 +143,8 @@ class Posts extends Component {
         containerStyle={{
           marginTop: 0,
           borderTopWidth: 0,
-          borderBottomWidth: 0
+          borderBottomWidth: 0,
+          flex: 1
         }}
       >
         <FlatList
@@ -189,6 +195,14 @@ class Posts extends Component {
           refreshing={this.state.loading}
           onEndReached={this.handleLoadMore}
         />
+        {this.props.adsEnabled
+          ? <AdMobBanner
+              adUnitID={Config.TEST_BANNER_ID}
+              bannerSize="banner"
+              testDeviceID="EMULATOR"
+              didFailToReceiveAdWithError={err => console.error(err)}
+            />
+          : null}
       </List>
     );
   }

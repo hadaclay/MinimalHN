@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-import Config from 'react-native-config';
 
 import AppNavigator from './app/navigators/AppNavigator';
 

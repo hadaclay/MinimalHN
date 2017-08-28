@@ -9,7 +9,13 @@ class NewPosts extends Component {
   };
 
   render() {
-    return <Posts filter="new" navigation={this.props.navigation} />;
+    return (
+      <Posts
+        adsEnabled={this.props.screenProps.adsEnabled}
+        filter="new"
+        navigation={this.props.navigation}
+      />
+    );
   }
 }
 

@@ -9,7 +9,13 @@ class BestPosts extends Component {
   };
 
   render() {
-    return <Posts filter="best" navigation={this.props.navigation} />;
+    return (
+      <Posts
+        adsEnabled={this.props.screenProps.adsEnabled}
+        filter="best"
+        navigation={this.props.navigation}
+      />
+    );
   }
 }
 

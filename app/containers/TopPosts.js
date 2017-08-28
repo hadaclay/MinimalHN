@@ -9,7 +9,13 @@ class TopPosts extends Component {
   };
 
   render() {
-    return <Posts filter="top" navigation={this.props.navigation} />;
+    return (
+      <Posts
+        adsEnabled={this.props.screenProps.adsEnabled}
+        filter="top"
+        navigation={this.props.navigation}
+      />
+    );
   }
 }
 
