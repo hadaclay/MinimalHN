@@ -177,7 +177,7 @@ class Posts extends Component {
                     title: item.title
                   });
                 } else {
-                  // If no url (Ask HN etc, go to Comments)
+                  // If no ur (Ask HN etc, go to Comments)
                   navigate('Comments', {
                     post: item.id,
                     comments: item.kids,
@@ -198,8 +198,6 @@ class Posts extends Component {
         {this.props.adsEnabled
           ? <AdMobBanner
               adUnitID={Config.TEST_BANNER_ID}
-              bannerSize="banner"
-              testDeviceID="EMULATOR"
               didFailToReceiveAdWithError={err => console.error(err)}
             />
           : null}

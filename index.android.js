@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, AsyncStorage } from 'react-native';
 
 import AppNavigator from './app/navigators/AppNavigator';
 
@@ -8,13 +8,37 @@ class HackerNewsReact extends Component {
     super(props);
 
     this.state = {
-      // Remember to set this back to false by default after testing
-      adsEnabled: true
+      // Ads disabled by default
+      adsEnabled: false
     };
+
+    this.changeAds = this.changeAds.bind(this);
+  }
+
+  async componentDidMount() {
+    const adsEnabled =
+      (await AsyncStorage.getItem('adsEnabled', value => JSON.parse(value))) ||
+      false;
+    this.setState({ adsEnabled });
+    await AsyncStorage.setItem('adsEnabled', JSON.stringify(adsEnabled));
+
+  }
+
+  async changeAds() {
+    const adsEnabled = await AsyncStorage.getItem('adsEnabled', value =>
+      JSON.parse(value)
+    );
+    this.setState({ adsEnabled: !adsEnabled });
+    await AsyncStorage.setItem('adsEnabled', JSON.stringify(!adsEnabled));
   }
 
   render() {
-    return <AppNavigator adsEnabled={this.state.adsEnabled} />;
+    return (
+      <AppNavigator
+        adsEnabled={this.state.adsEnabled}
+        changeAds={this.changeAds}
+      />
+    );
   }
 }
 

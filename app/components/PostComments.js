@@ -55,6 +55,9 @@ class PostComments extends Component {
 
   async getComments(comments) {
     try {
+      if (comments === undefined) {
+        return [];
+      }
       const promises = comments.map(id => this.getComment(id));
       const commentData = await Promise.all(promises);
       return await commentData;

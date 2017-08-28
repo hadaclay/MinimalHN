@@ -124,7 +124,9 @@ const RootNav = StackNavigator(
 const AppNavigator = props =>
   <View style={{ flex: 1 }}>
     <StatusBar backgroundColor="#ff6600" />
-    <RootNav screenProps={{ adsEnabled: props.adsEnabled }} />
+    <RootNav
+      screenProps={{ adsEnabled: props.adsEnabled, changeAds: props.changeAds }}
+    />
   </View>;
 
 export default AppNavigator;
