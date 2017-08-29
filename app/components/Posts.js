@@ -197,7 +197,7 @@ class Posts extends Component {
         />
         {this.props.adsEnabled
           ? <AdMobBanner
-              adUnitID={Config.TEST_BANNER_ID}
+              adUnitID={Config.BANNER_ID}
               didFailToReceiveAdWithError={err => console.error(err)}
             />
           : null}

@@ -3,7 +3,7 @@ import { AppRegistry, AsyncStorage } from 'react-native';
 
 import AppNavigator from './app/navigators/AppNavigator';
 
-class HackerNewsReact extends Component {
+class MinimalHN extends Component {
   constructor(props) {
     super(props);
 
@@ -16,7 +16,7 @@ class HackerNewsReact extends Component {
   }
 
   async componentDidMount() {
-    let adsEnabled = await AsyncStorage.getItem('adsEnabled');
+    let adsEnabled = await AsyncStorage.getItem('adsEnabled') || 'false';
     adsEnabled = JSON.parse(adsEnabled);
 
     this.setState({ adsEnabled: JSON.parse(adsEnabled) });
@@ -41,4 +41,4 @@ class HackerNewsReact extends Component {
   }
 }
 
-AppRegistry.registerComponent('HackerNewsReact', () => HackerNewsReact);
+AppRegistry.registerComponent('MinimalHN', () => MinimalHN);

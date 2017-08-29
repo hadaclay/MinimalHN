@@ -75,9 +75,10 @@ const DrawerNav = DrawerNavigator(
   },
   {
     initialRouteName: 'Posts',
+    drawerWidth: 150,
     contentOptions: {
       activeBackgroundColor: '#ff6600',
-      activeTintColor: '#f5fcff'
+      activeTintColor: '#f5fcff',
     },
     tabBarOptions: {
       activeTintColor: '#ff6600'
