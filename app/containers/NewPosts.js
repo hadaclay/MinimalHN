@@ -20,7 +20,8 @@ class NewPosts extends Component {
 }
 
 NewPosts.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  screenProps: PropTypes.object.isRequired
 };
 
 export default NewPosts;

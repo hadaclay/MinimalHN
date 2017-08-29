@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
@@ -17,7 +18,6 @@ class Settings extends Component {
   };
 
   render() {
-    console.log(this.props.screenProps)
     return (
       <View style={styles.container}>
         <Text>Settings Page</Text>
@@ -31,5 +31,9 @@ class Settings extends Component {
     );
   }
 }
+
+Settings.propTypes = {
+  screenProps: PropTypes.object.isRequired
+};
 
 export default Settings;

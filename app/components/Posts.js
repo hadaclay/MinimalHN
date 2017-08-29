@@ -34,8 +34,8 @@ class Posts extends Component {
 
   async getPostIDs() {
     try {
-      let response,
-        postIDs = [];
+      let response;
+      let postIDs = [];
       if (this.state.postIDs.length <= 0) {
         response = await fetch(
           `https://hacker-news.firebaseio.com/v0/${this.props
@@ -208,7 +208,8 @@ class Posts extends Component {
 
 Posts.propTypes = {
   filter: PropTypes.string.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  adsEnabled: PropTypes.bool.isRequired
 };
 
 export default Posts;

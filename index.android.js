@@ -16,18 +16,17 @@ class HackerNewsReact extends Component {
   }
 
   async componentDidMount() {
-    const adsEnabled =
-      (await AsyncStorage.getItem('adsEnabled', value => JSON.parse(value))) ||
-      false;
-    this.setState({ adsEnabled });
-    await AsyncStorage.setItem('adsEnabled', JSON.stringify(adsEnabled));
+    let adsEnabled = await AsyncStorage.getItem('adsEnabled');
+    adsEnabled = JSON.parse(adsEnabled);
 
+    this.setState({ adsEnabled: JSON.parse(adsEnabled) });
+    await AsyncStorage.setItem('adsEnabled', JSON.stringify(adsEnabled));
   }
 
   async changeAds() {
-    const adsEnabled = await AsyncStorage.getItem('adsEnabled', value =>
-      JSON.parse(value)
-    );
+    let adsEnabled = await AsyncStorage.getItem('adsEnabled');
+    adsEnabled = JSON.parse(adsEnabled);
+
     this.setState({ adsEnabled: !adsEnabled });
     await AsyncStorage.setItem('adsEnabled', JSON.stringify(!adsEnabled));
   }

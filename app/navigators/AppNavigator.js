@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StatusBar, View } from 'react-native';
 import {
   StackNavigator,
@@ -128,5 +129,10 @@ const AppNavigator = props =>
       screenProps={{ adsEnabled: props.adsEnabled, changeAds: props.changeAds }}
     />
   </View>;
+
+AppNavigator.propTypes = {
+  adsEnabled: PropTypes.bool.isRequired,
+  changeAds: PropTypes.func.isRequired
+};
 
 export default AppNavigator;

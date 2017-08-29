@@ -20,7 +20,8 @@ class TopPosts extends Component {
 }
 
 TopPosts.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  screenProps: PropTypes.object.isRequired
 };
 
 export default TopPosts;
