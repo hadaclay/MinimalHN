@@ -53,6 +53,7 @@ const DrawerNav = DrawerNavigator(
           />
         ),
         title: 'Posts',
+        // eslint-disable-next-line
         drawerIcon: ({ tintColor }) =>
           <Icon name="library-books" size={26} color={tintColor} />
       })
@@ -72,6 +73,7 @@ const DrawerNav = DrawerNavigator(
           />
         ),
         title: 'Settings',
+        // eslint-disable-next-line
         drawerIcon: ({ tintColor }) =>
           <Icon name="settings" size={26} color={tintColor} />
       })
