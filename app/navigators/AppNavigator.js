@@ -44,7 +44,6 @@ const DrawerNav = DrawerNavigator(
           elevation: 0,
           paddingLeft: 10
         },
-        title: 'Posts',
         headerLeft: (
           <Icon
             name="menu"
@@ -52,7 +51,10 @@ const DrawerNav = DrawerNavigator(
             color="#eee"
             onPress={() => navigation.navigate('DrawerOpen')}
           />
-        )
+        ),
+        title: 'Posts',
+        drawerIcon: ({ tintColor }) =>
+          <Icon name="library-books" size={26} color={tintColor} />
       })
     },
     Settings: {
@@ -61,7 +63,6 @@ const DrawerNav = DrawerNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTintColor: '#eeeeee',
         headerStyle: { backgroundColor: '#ff6600' },
-        title: 'Settings',
         headerLeft: (
           <Icon
             name="menu"
@@ -69,7 +70,10 @@ const DrawerNav = DrawerNavigator(
             color="#eee"
             onPress={() => navigation.navigate('DrawerOpen')}
           />
-        )
+        ),
+        title: 'Settings',
+        drawerIcon: ({ tintColor }) =>
+          <Icon name="settings" size={26} color={tintColor} />
       })
     }
   },
@@ -78,7 +82,7 @@ const DrawerNav = DrawerNavigator(
     drawerWidth: 150,
     contentOptions: {
       activeBackgroundColor: '#ff6600',
-      activeTintColor: '#f5fcff',
+      activeTintColor: '#f5fcff'
     },
     tabBarOptions: {
       activeTintColor: '#ff6600'
