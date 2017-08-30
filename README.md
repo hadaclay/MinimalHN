@@ -6,6 +6,8 @@
 
 Mininal HN is an open-source Hacker News client written with React Native.
 
+[Download from Google Play](https://play.google.com/store/apps/details?id=com.hadaclay.minimalhn)
+
 ### Libraries Used:
 - react-navigation
 - react-native-admob
